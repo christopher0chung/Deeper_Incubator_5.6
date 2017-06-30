@@ -24,11 +24,11 @@ public class Deeper_RewiredIntputTest : MonoBehaviour {
 
     void Update()
     {
-        Debug.Log("Update for test");
+        //Debug.Log("Update for test");
         if (!ReInput.isReady) return;
-        Debug.Log("ReInput is ready");
+        //Debug.Log("ReInput is ready");
         if (player0 == null) return;
-        Debug.Log("Player is not null");
+        //Debug.Log("Player is not null");
 
         if (Input.GetKeyDown(KeyCode.Return))
         {
@@ -64,10 +64,10 @@ public class Deeper_RewiredIntputTest : MonoBehaviour {
             if (moveVector[i].x != 0.0f || moveVector[i].y != 0.0f)
             {
                 transform.position += moveVector[i];
-                Debug.Log("Input");
+                //Debug.Log("Input");
                 return;
             }
-            Debug.Log("No Input");
+            //Debug.Log("No Input");
         }
         else
         {

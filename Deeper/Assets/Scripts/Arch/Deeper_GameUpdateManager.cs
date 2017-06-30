@@ -49,7 +49,7 @@ public class Deeper_GameUpdateManager {
     }
     
 	public void RunUpdates () {
-        Debug.Log(_subDGO.Count);
+        //Debug.Log(_subDGO.Count);
 
     	if (!_pause)
         {

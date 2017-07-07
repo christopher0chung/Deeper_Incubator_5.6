@@ -168,7 +168,7 @@ public class Task_MenuAnimation_Highlight : Task_MenuTasks
     public override void TaskUpdate()
     {
         base.TaskUpdate();
-        Debug.Log("Task_MenuAnimation_Highlight is running");
+        //Debug.Log("Task_MenuAnimation_Highlight is running");
         myTMP.fontSize += Time.unscaledDeltaTime * scaleSpeed;
         if (myTMP.fontSize >= sizeHighlight)
             SetStatus(TaskStatus.Success);

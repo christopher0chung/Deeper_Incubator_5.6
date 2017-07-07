@@ -48,72 +48,79 @@ public class DebuggingTest : Deeper_Component {
         //Debug.Log("Post Update");
     }
 
-    private int highlightedIndex;
-    private int indexRange;
-    private void ChangeHighlighted(bool upPosDownNeg)
-    {
-        indexRange = GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems.Count - 1;
-        if (upPosDownNeg)
-            highlightedIndex++;
-        else
-            highlightedIndex--;
+    //private int highlightedIndex;
+    //private int indexRange;
+    //private void ChangeHighlighted(bool upPosDownNeg)
+    //{
+    //    indexRange = GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems.Count - 1;
+    //    if (upPosDownNeg)
+    //        highlightedIndex++;
+    //    else
+    //        highlightedIndex--;
 
-        if (highlightedIndex > indexRange)
-            highlightedIndex = 0;
-        if (highlightedIndex < 0)
-            highlightedIndex = indexRange;
+    //    if (highlightedIndex > indexRange)
+    //        highlightedIndex = 0;
+    //    if (highlightedIndex < 0)
+    //        highlightedIndex = indexRange;
 
-        Debug.Log(highlightedIndex);
+    //    Debug.Log(highlightedIndex);
 
-        for (int i = 0; i <= indexRange; i++)
-        {
-            if (i == highlightedIndex)
-                GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[i].itemState = MenuItemStates.Highlighted;
-            else
-                GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[i].itemState = MenuItemStates.Available;
-            Debug.Log(i + " was set to " + GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[i].itemState);
-        }
-    }
+    //    for (int i = 0; i <= indexRange; i++)
+    //    {
+    //        if (i == highlightedIndex)
+    //            GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[i].itemState = MenuItemStates.Highlighted;
+    //        else
+    //            GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[i].itemState = MenuItemStates.Available;
+    //        Debug.Log(i + " was set to " + GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[i].itemState);
+    //    }
+    //}
 
-    bool vis = true;
+    //bool vis = true;
 
-    private void ChangeVis()
-    {
-        vis = !vis;
-        indexRange = GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems.Count - 1;
+    //private void ChangeVis()
+    //{
+    //    vis = !vis;
+    //    indexRange = GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems.Count - 1;
 
-        for (int i = 0; i <= indexRange; i++)
-        {
-            if (vis)
-                GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[i].itemState = MenuItemStates.Available;
-            else
-                GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[i].itemState = MenuItemStates.Hidden;
-            Debug.Log(i + " was set to " + GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[i].itemState);
-        }
-    }
+    //    for (int i = 0; i <= indexRange; i++)
+    //    {
+    //        if (vis)
+    //            GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[i].itemState = MenuItemStates.Available;
+    //        else
+    //            GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[i].itemState = MenuItemStates.Hidden;
+    //        //Debug.Log(i + " was set to " + GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[i].itemState);
+    //    }
+    //}
+
+    private Deeper_RolloverInt testROI = new Deeper_RolloverInt(5, 5, 9);
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[0].itemState = MenuItemStates.Available;
-            //GameObject.Find("Managers").GetComponent<Deeper_TaskManager>().AddTask(new Task_MenuAnimation_Highlight(GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[0], TaskCanBeInterrupted.Yes, TaskDoesInterrupt.Yes));
-        }
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[0].itemState = MenuItemStates.Highlighted;
-            //GameObject.Find("Managers").GetComponent<Deeper_TaskManager>().AddTask(new Task_MenuAnimation_Unhighlight(GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[0], TaskCanBeInterrupted.Yes, TaskDoesInterrupt.Yes));
-        }
+        //if (Input.GetKeyDown(KeyCode.K))
+        //{
+        //    GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[0].itemState = MenuItemStates.Available;
+        //    //GameObject.Find("Managers").GetComponent<Deeper_TaskManager>().AddTask(new Task_MenuAnimation_Highlight(GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[0], TaskCanBeInterrupted.Yes, TaskDoesInterrupt.Yes));
+        //}
+        //if (Input.GetKeyDown(KeyCode.L))
+        //{
+        //    GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[0].itemState = MenuItemStates.Highlighted;
+        //    //GameObject.Find("Managers").GetComponent<Deeper_TaskManager>().AddTask(new Task_MenuAnimation_Unhighlight(GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[0], TaskCanBeInterrupted.Yes, TaskDoesInterrupt.Yes));
+        //}
 
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            ChangeVis();
-        }
+        //if (Input.GetKeyDown(KeyCode.J))
+        //{
+        //    ChangeVis();
+        //}
+
+        //if (Input.GetKeyDown(KeyCode.UpArrow))
+        //    ChangeHighlighted(false);
+        //if (Input.GetKeyDown(KeyCode.DownArrow))
+        //    ChangeHighlighted(true);
 
         if (Input.GetKeyDown(KeyCode.UpArrow))
-            ChangeHighlighted(false);
-        if (Input.GetKeyDown(KeyCode.DownArrow))
-            ChangeHighlighted(true);
+        {
+            testROI.intVal++;
+        }
 
         if (Input.GetKeyDown(KeyCode.Space))
         {

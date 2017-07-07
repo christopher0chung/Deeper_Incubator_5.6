@@ -15,11 +15,6 @@ public class Deeper_MenuItem
 
         itemTMP.fontSize = 20;
         itemTMP.alignment = TextAlignmentOptions.Center;
-
-        if (GameObject.FindGameObjectWithTag("MainCamera").transform != null)
-            itemGameObject.transform.SetParent(GameObject.FindGameObjectWithTag("MainCamera").transform, false);
-
-        //itemState = MenuItemStates.Hidden;
     }
 
     #region Internal
@@ -27,56 +22,6 @@ public class Deeper_MenuItem
     public GameObject itemGameObject;
     public TMPro.TextMeshPro itemTMP;
     public string visibleLabel;
-
-    //private MenuItemStates _itemState;
-    //public MenuItemStates itemState
-    //{
-    //    get { return _itemState; }
-    //    set
-    //    {
-    //        Debug.Log("state was " + _itemState + ", but is now " + value);
-    //        if (value != _itemState)
-    //        {
-    //            if (_itemState == MenuItemStates.Available)
-    //            {
-    //                if (value == MenuItemStates.Highlighted)
-    //                {
-    //                    GameObject.Find("Managers").GetComponent<Deeper_TaskManager>().AddTask(new Task_MenuAnimation_Highlight(this, TaskCanBeInterrupted.Yes, TaskDoesInterrupt.Yes));
-    //                }
-    //                if (value == MenuItemStates.Hidden)
-    //                {
-    //                    GameObject.Find("Managers").GetComponent<Deeper_TaskManager>().AddTask(new Task_MenuAnimation_Invisible(this, TaskCanBeInterrupted.Yes, TaskDoesInterrupt.Yes));
-    //                }
-    //            }
-    //            if (_itemState == MenuItemStates.Highlighted)
-    //            {
-    //                if (value == MenuItemStates.Available)
-    //                {
-    //                    GameObject.Find("Managers").GetComponent<Deeper_TaskManager>().AddTask(new Task_MenuAnimation_Unhighlight(this, TaskCanBeInterrupted.Yes, TaskDoesInterrupt.Yes));
-    //                }
-    //                if (value == MenuItemStates.Accessed)
-    //                {
-    //                    //Task to move to title space
-    //                }
-    //            }
-    //            if (_itemState == MenuItemStates.Accessed)
-    //            {
-    //                if (value == MenuItemStates.Highlighted)
-    //                {
-    //                    //Task to move from title to item
-    //                }
-    //            }
-    //            if (_itemState == MenuItemStates.Hidden)
-    //            {
-    //                if (value == MenuItemStates.Available)
-    //                {
-    //                    GameObject.Find("Managers").GetComponent<Deeper_TaskManager>().AddTask(new Task_MenuAnimation_Visible(this, TaskCanBeInterrupted.Yes, TaskDoesInterrupt.Yes));
-    //                }
-    //            }
-    //            _itemState = value;
-    //        }
-    //    }
-    //}
 
     private bool _hidden;
     public bool hidden
@@ -112,47 +57,26 @@ public class Deeper_MenuItem
         }
     }
 
-    private MenuItemState3 _state;
-    public MenuItemState3 state
-    {
-        get { return _state; }
-        set
-        {
-            if (value != _state)
-            {
-                _state = value;
-                if (_state == MenuItemState3.Active)
-                    Debug.Log("Active");
-                else if (_state == MenuItemState3.Inactive)
-                    Debug.Log("Inactive");
-                else
-                    Debug.Log("Open");
-            }
-        }
-    }
-
     #endregion
 }
-public enum MenuItemState3 { Active, Open, Inactive }
-public enum MenuItemStates { Available, Highlighted, Accessed, Hidden }
 
-public class Deeper_MenuGroup
-{
-    public Deeper_MenuGroup pathUp;
-    public List<Deeper_MenuGroup> menuItemsPath = new List<Deeper_MenuGroup>();
+//public class Deeper_MenuGroup
+//{
+//    public Deeper_MenuObject pathUp;
+//    public List<Deeper_MenuObject> menuItemsPath = new List<Deeper_MenuObject>();
 
-    private List<string> _menuLabels = new List<string>();
-    public List<Deeper_MenuItem> menuItems = new List<Deeper_MenuItem>();
+//    private List<string> _menuLabels = new List<string>();
+//    public List<Deeper_MenuItem> menuItems = new List<Deeper_MenuItem>();
 
-    public Deeper_MenuGroup(Deeper_MenuGroup p, List<string> m, List<Deeper_MenuGroup> iP)
-    {
-        pathUp = p;
-        menuItemsPath = iP;
-        _menuLabels = m;
+//    public Deeper_MenuGroup(Deeper_MenuObject p, List<string> m, List<Deeper_MenuObject> iP)
+//    {
+//        pathUp = p;
+//        menuItemsPath = iP;
+//        _menuLabels = m;
 
-        for (int i = 0; i < _menuLabels.Count; i++)
-        {
-            menuItems.Add(new Deeper_MenuItem(_menuLabels[i]));
-        }
-    }
-}
+//        for (int i = 0; i < _menuLabels.Count; i++)
+//        {
+//            menuItems.Add(new Deeper_MenuItem(_menuLabels[i]));
+//        }
+//    }
+//}

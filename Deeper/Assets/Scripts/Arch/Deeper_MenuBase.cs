@@ -13,7 +13,13 @@ public class Deeper_MenuItem
         itemTMP = itemGameObject.AddComponent<TMPro.TextMeshPro>();
         itemTMP.text = visibleLabel;
 
-        itemState = MenuItemStates.Hidden;
+        itemTMP.fontSize = 20;
+        itemTMP.alignment = TextAlignmentOptions.Center;
+
+        if (GameObject.FindGameObjectWithTag("MainCamera").transform != null)
+            itemGameObject.transform.SetParent(GameObject.FindGameObjectWithTag("MainCamera").transform, false);
+
+        //itemState = MenuItemStates.Hidden;
     }
 
     #region Internal
@@ -22,66 +28,121 @@ public class Deeper_MenuItem
     public TMPro.TextMeshPro itemTMP;
     public string visibleLabel;
 
-    private MenuItemStates _itemState;
-    public MenuItemStates itemState
+    //private MenuItemStates _itemState;
+    //public MenuItemStates itemState
+    //{
+    //    get { return _itemState; }
+    //    set
+    //    {
+    //        Debug.Log("state was " + _itemState + ", but is now " + value);
+    //        if (value != _itemState)
+    //        {
+    //            if (_itemState == MenuItemStates.Available)
+    //            {
+    //                if (value == MenuItemStates.Highlighted)
+    //                {
+    //                    GameObject.Find("Managers").GetComponent<Deeper_TaskManager>().AddTask(new Task_MenuAnimation_Highlight(this, TaskCanBeInterrupted.Yes, TaskDoesInterrupt.Yes));
+    //                }
+    //                if (value == MenuItemStates.Hidden)
+    //                {
+    //                    GameObject.Find("Managers").GetComponent<Deeper_TaskManager>().AddTask(new Task_MenuAnimation_Invisible(this, TaskCanBeInterrupted.Yes, TaskDoesInterrupt.Yes));
+    //                }
+    //            }
+    //            if (_itemState == MenuItemStates.Highlighted)
+    //            {
+    //                if (value == MenuItemStates.Available)
+    //                {
+    //                    GameObject.Find("Managers").GetComponent<Deeper_TaskManager>().AddTask(new Task_MenuAnimation_Unhighlight(this, TaskCanBeInterrupted.Yes, TaskDoesInterrupt.Yes));
+    //                }
+    //                if (value == MenuItemStates.Accessed)
+    //                {
+    //                    //Task to move to title space
+    //                }
+    //            }
+    //            if (_itemState == MenuItemStates.Accessed)
+    //            {
+    //                if (value == MenuItemStates.Highlighted)
+    //                {
+    //                    //Task to move from title to item
+    //                }
+    //            }
+    //            if (_itemState == MenuItemStates.Hidden)
+    //            {
+    //                if (value == MenuItemStates.Available)
+    //                {
+    //                    GameObject.Find("Managers").GetComponent<Deeper_TaskManager>().AddTask(new Task_MenuAnimation_Visible(this, TaskCanBeInterrupted.Yes, TaskDoesInterrupt.Yes));
+    //                }
+    //            }
+    //            _itemState = value;
+    //        }
+    //    }
+    //}
+
+    private bool _hidden;
+    public bool hidden
     {
-        get { return _itemState; }
+        get { return _hidden; }
         set
         {
-            if (value != _itemState)
+            if (value != _hidden)
             {
-                if (_itemState == MenuItemStates.Available)
-                {
-                    if (value == MenuItemStates.Highlighted)
-                    {
-                        //Task to highlight
-                    }
-                    if (value == MenuItemStates.Hidden)
-                    {
-                        //Task to hide
-                    }
-                }
-                if (_itemState == MenuItemStates.Highlighted)
-                {
-                    if (value == MenuItemStates.Available)
-                    {
-                        //Task to move to avaiable idle state
-                    }
-                    if (value == MenuItemStates.Accessed)
-                    {
-                        //Task to move to title space
-                    }
-                }
-                if (_itemState == MenuItemStates.Accessed)
-                {
-                    if (value == MenuItemStates.Highlighted)
-                    {
-                        //Task to move from title to item
-                    }
-                }
-                if (_itemState == MenuItemStates.Hidden)
-                {
-                    if (value == MenuItemStates.Available)
-                    {
-                        //Task to go from hidden to visible
-                    }
-                }
-                _itemState = value;
+                _hidden = value;
+                if (_hidden)
+                    GameObject.Find("Managers").GetComponent<Deeper_TaskManager>().AddTask(new Task_MenuAnimation_Invisible(this, TaskCanBeInterrupted.Yes, TaskDoesInterrupt.Yes));
+                else
+                    GameObject.Find("Managers").GetComponent<Deeper_TaskManager>().AddTask(new Task_MenuAnimation_Visible(this, TaskCanBeInterrupted.Yes, TaskDoesInterrupt.Yes));
             }
         }
     }
+
+    private bool _highlighted;
+    public bool highlighted
+    {
+        get { return _highlighted; }
+        set
+        {
+            if (value != _highlighted)
+            {
+                _highlighted = value;
+                if (_highlighted)
+                    GameObject.Find("Managers").GetComponent<Deeper_TaskManager>().AddTask(new Task_MenuAnimation_Highlight(this, TaskCanBeInterrupted.Yes, TaskDoesInterrupt.Yes));
+                else
+                    GameObject.Find("Managers").GetComponent<Deeper_TaskManager>().AddTask(new Task_MenuAnimation_Unhighlight(this, TaskCanBeInterrupted.Yes, TaskDoesInterrupt.Yes));
+            }
+        }
+    }
+
+    private MenuItemState3 _state;
+    public MenuItemState3 state
+    {
+        get { return _state; }
+        set
+        {
+            if (value != _state)
+            {
+                _state = value;
+                if (_state == MenuItemState3.Active)
+                    Debug.Log("Active");
+                else if (_state == MenuItemState3.Inactive)
+                    Debug.Log("Inactive");
+                else
+                    Debug.Log("Open");
+            }
+        }
+    }
+
     #endregion
 }
-
+public enum MenuItemState3 { Active, Open, Inactive }
 public enum MenuItemStates { Available, Highlighted, Accessed, Hidden }
 
 public class Deeper_MenuGroup
 {
     public Deeper_MenuGroup pathUp;
-    public List<Deeper_MenuGroup> menuItemsPath;
+    public List<Deeper_MenuGroup> menuItemsPath = new List<Deeper_MenuGroup>();
 
-    private List<string> _menuLabels;
-    public List<Deeper_MenuItem> menuItems;
+    private List<string> _menuLabels = new List<string>();
+    public List<Deeper_MenuItem> menuItems = new List<Deeper_MenuItem>();
 
     public Deeper_MenuGroup(Deeper_MenuGroup p, List<string> m, List<Deeper_MenuGroup> iP)
     {
@@ -94,29 +155,4 @@ public class Deeper_MenuGroup
             menuItems.Add(new Deeper_MenuItem(_menuLabels[i]));
         }
     }
-}
-
-public class Deeper_MenuObject : MonoBehaviour
-{
-    private Deeper_MenuGroup testMG;
-
-    private List<string> testItems;
-    private List<Deeper_MenuGroup> testPaths;
-
-    private void Awake()
-    {
-        testItems.Add("Number 1");
-        testItems.Add("Number 2");
-
-        testPaths.Add(null);
-        testPaths.Add(null);
-    }
-
-    private void Start()
-    {
-        testMG = new Deeper_MenuGroup(null, testItems, testPaths);
-        testMG.menuItems[0].itemGameObject.transform.position = Vector3.zero;
-        testMG.menuItems[1].itemGameObject.transform.position = Vector3.zero + Vector3.up;
-    }
-
 }

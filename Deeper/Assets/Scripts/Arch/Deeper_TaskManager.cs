@@ -89,10 +89,55 @@ public class Deeper_TaskManager : Deeper_Component
         }
     }
 
+    private List<Task> examinedTasks = new List<Task>();
+
     public void AddTask(Task myTask)
     {
+        //Debug.Log("Adding a task");
         Debug.Assert(myTask != null);
         Debug.Assert(!myTask.IsAttached);
+
+        examinedTasks.Clear();
+        // If it does interrupt, look for and hold every other task that it shares a context with.
+        // Each item in that list, if it can be interrupted, then interrupt it.
+        if (myTask.DoesInterrupt == TaskDoesInterrupt.Yes)
+        {
+            //Debug.Log("The new taks does interrupt");
+
+            Task_MenuTasks mOfMyTask = myTask as Task_MenuTasks;
+            if (mOfMyTask != null)
+            {
+                //Debug.Log("New task is a menuTask");
+
+                foreach (Task t in TasksList)
+                {
+                    //Debug.Log("Going through TasksList");
+                    Task_MenuTasks mInTaskList = t as Task_MenuTasks;
+                    if (mInTaskList != null)
+                    {
+                        //Debug.Log("Found a menu task");
+                        if (mOfMyTask.context == mInTaskList.context)
+                        {
+                            examinedTasks.Add(mInTaskList);
+                            //Debug.Log("Added it to the eamedTasks list.");
+                        }
+                    }
+                }
+
+                if (examinedTasks.Count >= 1)
+                {
+                    //Debug.Log("There are " + examinedTasks.Count + " tasks that share the same context");
+                    foreach (Task t in TasksList)
+                    {
+                        Task_MenuTasks mInExamined = (Task_MenuTasks)t;
+                        if (mInExamined.CanBeInterrupted == TaskCanBeInterrupted.Yes)
+                        {
+                            mInExamined.SetStatus(TaskStatus.Aborted);
+                        }
+                    }
+                }
+            }
+        }
         TasksList.Add(myTask);
         myTask.SetStatus(TaskStatus.Pending);
     }
@@ -117,4 +162,7 @@ public class Deeper_TaskManager : Deeper_Component
         task.SetStatus(TaskStatus.Detached);
     }
 }
+
+public enum TaskCanBeInterrupted { Yes, No}
+public enum TaskDoesInterrupt { Yes, No}
 

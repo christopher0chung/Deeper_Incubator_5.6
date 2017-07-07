@@ -9,6 +9,9 @@ public class Task
     public TaskStatus Status { get; private set; }
     public Task NextTask { get; private set; }
 
+    public TaskCanBeInterrupted CanBeInterrupted;
+    public TaskDoesInterrupt DoesInterrupt;
+
     public bool IsDetached { get { return Status == TaskStatus.Detached; } }
     public bool IsAttached { get { return Status != TaskStatus.Detached; } }
     public bool IsPending { get { return Status == TaskStatus.Pending; } }
@@ -121,35 +124,228 @@ public class TestTask : Task
     }
 }
 
-public class Task_MenuAnimation_Highlight : Task
-{
-    private Deeper_MenuItem context;
-    private TMPro.TextMeshPro myTMP;
+//-------------------------------------------------
+// Menu Tasks
+//-------------------------------------------------
 
+public class Task_MenuTasks: Task
+{
+    public Deeper_MenuItem context;
+    public TMPro.TextMeshPro myTMP;
+
+    public float scaleSpeed = 120;
+    public float sizeIdle = 20;
+    public float sizeHighlight = 22;
+
+    public Color colorVis = new Color(1, 1, 1, 1);
+    public Color colorInvis = new Color(1, 1, 1, 0);
+    public float colorNormalizedTime = .15f;
+}
+
+public class Task_MenuAnimation_Highlight : Task_MenuTasks
+{
     public Task_MenuAnimation_Highlight (Deeper_MenuItem c)
     {
         context = c;
-        myTMP = c.gameObject.GetComponent<TMPro.TextMeshPro>();
+        myTMP = c.itemTMP;
+        CanBeInterrupted = TaskCanBeInterrupted.Yes;
+        DoesInterrupt = TaskDoesInterrupt.No;
+    }
+
+    public Task_MenuAnimation_Highlight(Deeper_MenuItem c, TaskCanBeInterrupted cI, TaskDoesInterrupt dI)
+    {
+        context = c;
+        myTMP = c.itemTMP;
+        CanBeInterrupted = cI;
+        DoesInterrupt = dI;
+    }
+
+    public override void Init()
+    {
+        myTMP.fontSize = sizeIdle;
     }
 
     public override void TaskUpdate()
     {
         base.TaskUpdate();
         Debug.Log("Task_MenuAnimation_Highlight is running");
-        myTMP.fontSize += Time.unscaledDeltaTime * 10;
-        if (myTMP.fontSize >= 30)
+        myTMP.fontSize += Time.unscaledDeltaTime * scaleSpeed;
+        if (myTMP.fontSize >= sizeHighlight)
             SetStatus(TaskStatus.Success);
     }
 
     public override void OnFail()
     {
         base.OnFail();
-        myTMP.fontSize = 20;
+        myTMP.fontSize = sizeIdle;
+    }
+
+    public override void OnAbort()
+    {
+        OnFail();
     }
 
     public override void OnSuccess()
     {
         base.OnSuccess();
-        myTMP.fontSize = 30;
+        myTMP.fontSize = sizeHighlight;
+    }
+}
+
+public class Task_MenuAnimation_Unhighlight : Task_MenuTasks
+{
+    public Task_MenuAnimation_Unhighlight(Deeper_MenuItem c)
+    {
+        context = c;
+        myTMP = c.itemTMP;
+        CanBeInterrupted = TaskCanBeInterrupted.Yes;
+        DoesInterrupt = TaskDoesInterrupt.No;
+    }
+
+    public Task_MenuAnimation_Unhighlight(Deeper_MenuItem c, TaskCanBeInterrupted cI, TaskDoesInterrupt dI)
+    {
+        context = c;
+        myTMP = c.itemTMP;
+        CanBeInterrupted = cI;
+        DoesInterrupt = dI;
+    }
+
+    public override void Init()
+    {
+        myTMP.fontSize = sizeHighlight;
+    }
+
+    public override void TaskUpdate()
+    {
+        base.TaskUpdate();
+        Debug.Log("Task_MenuAnimation_Unhighlight is running");
+        myTMP.fontSize -= Time.unscaledDeltaTime * scaleSpeed;
+        if (myTMP.fontSize <= sizeIdle)
+            SetStatus(TaskStatus.Success);
+    }
+
+    public override void OnFail()
+    {
+        base.OnFail();
+        myTMP.fontSize = sizeHighlight;
+    }
+
+    public override void OnAbort()
+    {
+        OnFail();
+    }
+
+    public override void OnSuccess()
+    {
+        base.OnSuccess();
+        myTMP.fontSize = sizeIdle;
+    }
+}
+
+public class Task_MenuAnimation_Visible : Task_MenuTasks
+{
+    public Task_MenuAnimation_Visible(Deeper_MenuItem c)
+    {
+        context = c;
+        myTMP = c.itemTMP;
+        CanBeInterrupted = TaskCanBeInterrupted.Yes;
+        DoesInterrupt = TaskDoesInterrupt.No;
+    }
+
+    public Task_MenuAnimation_Visible(Deeper_MenuItem c, TaskCanBeInterrupted cI, TaskDoesInterrupt dI)
+    {
+        context = c;
+        myTMP = c.itemTMP;
+        CanBeInterrupted = cI;
+        DoesInterrupt = dI;
+    }
+
+    private float timer;
+
+    public override void Init()
+    {
+        myTMP.color = colorInvis;
+        timer = 0;
+    }
+
+    public override void TaskUpdate()
+    {
+        base.TaskUpdate();
+        Debug.Log("Task_MenuAnimation_Visible is running");
+        timer += Time.unscaledDeltaTime;
+        myTMP.color = Color.Lerp(colorInvis, colorVis, timer / colorNormalizedTime);
+        if (timer / colorNormalizedTime >= 1)
+            SetStatus(TaskStatus.Success);
+    }
+
+    public override void OnFail()
+    {
+        base.OnFail();
+        myTMP.color = colorInvis;
+    }
+
+    public override void OnAbort()
+    {
+        OnFail();
+    }
+
+    public override void OnSuccess()
+    {
+        base.OnSuccess();
+        myTMP.color = colorVis;
+    }
+}
+
+public class Task_MenuAnimation_Invisible : Task_MenuTasks
+{
+    public Task_MenuAnimation_Invisible(Deeper_MenuItem c)
+    {
+        context = c;
+        myTMP = c.itemTMP;
+        CanBeInterrupted = TaskCanBeInterrupted.Yes;
+        DoesInterrupt = TaskDoesInterrupt.No;
+    }
+
+    public Task_MenuAnimation_Invisible(Deeper_MenuItem c, TaskCanBeInterrupted cI, TaskDoesInterrupt dI)
+    {
+        context = c;
+        myTMP = c.itemTMP;
+        CanBeInterrupted = cI;
+        DoesInterrupt = dI;
+    }
+
+    private float timer;
+
+    public override void Init()
+    {
+        myTMP.color = colorVis;
+        timer = 0;
+    }
+
+    public override void TaskUpdate()
+    {
+        base.TaskUpdate();
+        Debug.Log("Task_MenuAnimation_Visible is running");
+        timer += Time.unscaledDeltaTime;
+        myTMP.color = Color.Lerp(colorVis, colorInvis, timer / colorNormalizedTime);
+        if (timer / colorNormalizedTime >= 1)
+            SetStatus(TaskStatus.Success);
+    }
+
+    public override void OnFail()
+    {
+        base.OnFail();
+        myTMP.color = colorVis;
+    }
+
+    public override void OnAbort()
+    {
+        OnFail();
+    }
+
+    public override void OnSuccess()
+    {
+        base.OnSuccess();
+        myTMP.color = colorInvis;
     }
 }

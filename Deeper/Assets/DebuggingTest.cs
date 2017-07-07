@@ -47,8 +47,74 @@ public class DebuggingTest : Deeper_Component {
         base.PostUpdate();
         //Debug.Log("Post Update");
     }
+
+    private int highlightedIndex;
+    private int indexRange;
+    private void ChangeHighlighted(bool upPosDownNeg)
+    {
+        indexRange = GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems.Count - 1;
+        if (upPosDownNeg)
+            highlightedIndex++;
+        else
+            highlightedIndex--;
+
+        if (highlightedIndex > indexRange)
+            highlightedIndex = 0;
+        if (highlightedIndex < 0)
+            highlightedIndex = indexRange;
+
+        Debug.Log(highlightedIndex);
+
+        for (int i = 0; i <= indexRange; i++)
+        {
+            if (i == highlightedIndex)
+                GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[i].itemState = MenuItemStates.Highlighted;
+            else
+                GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[i].itemState = MenuItemStates.Available;
+            Debug.Log(i + " was set to " + GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[i].itemState);
+        }
+    }
+
+    bool vis = true;
+
+    private void ChangeVis()
+    {
+        vis = !vis;
+        indexRange = GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems.Count - 1;
+
+        for (int i = 0; i <= indexRange; i++)
+        {
+            if (vis)
+                GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[i].itemState = MenuItemStates.Available;
+            else
+                GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[i].itemState = MenuItemStates.Hidden;
+            Debug.Log(i + " was set to " + GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[i].itemState);
+        }
+    }
+
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[0].itemState = MenuItemStates.Available;
+            //GameObject.Find("Managers").GetComponent<Deeper_TaskManager>().AddTask(new Task_MenuAnimation_Highlight(GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[0], TaskCanBeInterrupted.Yes, TaskDoesInterrupt.Yes));
+        }
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[0].itemState = MenuItemStates.Highlighted;
+            //GameObject.Find("Managers").GetComponent<Deeper_TaskManager>().AddTask(new Task_MenuAnimation_Unhighlight(GameObject.Find("Managers").GetComponent<Deeper_MenuObject>().testMG.menuItems[0], TaskCanBeInterrupted.Yes, TaskDoesInterrupt.Yes));
+        }
+
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            ChangeVis();
+        }
+
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+            ChangeHighlighted(false);
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+            ChangeHighlighted(true);
+
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Deeper_ServicesLocator.instance.PauseToggle();
@@ -99,40 +165,40 @@ public class DebuggingTest : Deeper_Component {
 
         myText.text = "V:" + players[0].GetAxis("Menu Select Vertical") + "\nH:" + players[0].GetAxis("Menu Select Horizontal");
 
-        for (int i = 0; i <= 1; i++)
-        {
-            Debug.Log("Player " + i + " Start is: " + players[i].GetButtonDown("Start"));
-            Debug.Log("Player " + i + " Cancel is: " + players[i].GetButtonDown("Cancel"));
-            Debug.Log("Player " + i + " Dialogue Skip is: " + players[i].GetButtonDown("Dialogue Skip"));
+        //for (int i = 0; i <= 1; i++)
+        //{
+        //    Debug.Log("Player " + i + " Start is: " + players[i].GetButtonDown("Start"));
+        //    Debug.Log("Player " + i + " Cancel is: " + players[i].GetButtonDown("Cancel"));
+        //    Debug.Log("Player " + i + " Dialogue Skip is: " + players[i].GetButtonDown("Dialogue Skip"));
 
-            Debug.Log("Player " + i + " Menu Select Vertical is: " + players[i].GetAxis("Menu Select Vertical"));
-            Debug.Log("Player " + i + " Menu Select Horizontal: " + players[i].GetAxis("Menu Select Horizontal"));
-            Debug.Log("Player " + i + " Menu Accept: " + players[i].GetButtonDown("Menu Accept"));
+        //    Debug.Log("Player " + i + " Menu Select Vertical is: " + players[i].GetAxis("Menu Select Vertical"));
+        //    Debug.Log("Player " + i + " Menu Select Horizontal: " + players[i].GetAxis("Menu Select Horizontal"));
+        //    Debug.Log("Player " + i + " Menu Accept: " + players[i].GetButtonDown("Menu Accept"));
 
-            Debug.Log("Player " + i + " Doc Swim Vertical is: " + players[i].GetAxis("Doc Swim Vertical"));
-            Debug.Log("Player " + i + " Doc Swim Horizontal is: " + players[i].GetAxis("Doc Swim Horizontal"));
-            Debug.Log("Player " + i + " Doc Light Vertical is: " + players[i].GetAxis("Doc Light Vertical"));
-            Debug.Log("Player " + i + " Doc Light Horizontal is: " + players[i].GetAxis("Doc Light Horizontal"));
-            Debug.Log("Player " + i + " Doc Action is: " + players[i].GetButtonDown("Doc Action"));
-            Debug.Log("Player " + i + " Doc Sub Vertical is: " + players[i].GetAxis("Doc Sub Move Vertical"));
-            Debug.Log("Player " + i + " Doc Sub Horizontal is: " + players[i].GetAxis("Doc Sub Move Horizontal"));
-            Debug.Log("Player " + i + " Doc Sub Light Vertical is: " + players[i].GetAxis("Doc Sub Light Vertical"));
-            Debug.Log("Player " + i + " Doc Sub Light Horizontal is: " + players[i].GetAxis("Doc Sub Light Horizontal"));
-            Debug.Log("Player " + i + " Doc Sub Egress is: " + players[i].GetButtonDown("Doc Sub Egress"));
-            Debug.Log("Player " + i + " Doc Dialogue Select is: " + players[i].GetButtonDown("Doc Dialogue Select"));
+        //    Debug.Log("Player " + i + " Doc Swim Vertical is: " + players[i].GetAxis("Doc Swim Vertical"));
+        //    Debug.Log("Player " + i + " Doc Swim Horizontal is: " + players[i].GetAxis("Doc Swim Horizontal"));
+        //    Debug.Log("Player " + i + " Doc Light Vertical is: " + players[i].GetAxis("Doc Light Vertical"));
+        //    Debug.Log("Player " + i + " Doc Light Horizontal is: " + players[i].GetAxis("Doc Light Horizontal"));
+        //    Debug.Log("Player " + i + " Doc Action is: " + players[i].GetButtonDown("Doc Action"));
+        //    Debug.Log("Player " + i + " Doc Sub Vertical is: " + players[i].GetAxis("Doc Sub Move Vertical"));
+        //    Debug.Log("Player " + i + " Doc Sub Horizontal is: " + players[i].GetAxis("Doc Sub Move Horizontal"));
+        //    Debug.Log("Player " + i + " Doc Sub Light Vertical is: " + players[i].GetAxis("Doc Sub Light Vertical"));
+        //    Debug.Log("Player " + i + " Doc Sub Light Horizontal is: " + players[i].GetAxis("Doc Sub Light Horizontal"));
+        //    Debug.Log("Player " + i + " Doc Sub Egress is: " + players[i].GetButtonDown("Doc Sub Egress"));
+        //    Debug.Log("Player " + i + " Doc Dialogue Select is: " + players[i].GetButtonDown("Doc Dialogue Select"));
 
-            Debug.Log("Player " + i + " Ops Swim Vertical is: " + players[i].GetAxis("Ops Swim Vertical"));
-            Debug.Log("Player " + i + " Ops Swim Horizontal is: " + players[i].GetAxis("Ops Swim Horizontal"));
-            Debug.Log("Player " + i + " Ops Light Vertical is: " + players[i].GetAxis("Ops Light Vertical"));
-            Debug.Log("Player " + i + " Ops Light Horizontal is: " + players[i].GetAxis("Ops Light Horizontal"));
-            Debug.Log("Player " + i + " Ops Action is: " + players[i].GetButtonDown("Ops Action"));
-            Debug.Log("Player " + i + " Ops Sub Vertical is: " + players[i].GetAxis("Ops Sub Move Vertical"));
-            Debug.Log("Player " + i + " Ops Sub Horizontal is: " + players[i].GetAxis("Ops Sub Move Horizontal"));
-            Debug.Log("Player " + i + " Ops Sub Light Vertical is: " + players[i].GetAxis("Ops Sub Light Vertical"));
-            Debug.Log("Player " + i + " Ops Sub Light Horizontal is: " + players[i].GetAxis("Ops Sub Light Horizontal"));
-            Debug.Log("Player " + i + " Ops Sub Egress is: " + players[i].GetButtonDown("Ops Sub Egress"));
-            Debug.Log("Player " + i + " Ops Dialogue Select is: " + players[i].GetButtonDown("Ops Dialogue Select"));
+        //    Debug.Log("Player " + i + " Ops Swim Vertical is: " + players[i].GetAxis("Ops Swim Vertical"));
+        //    Debug.Log("Player " + i + " Ops Swim Horizontal is: " + players[i].GetAxis("Ops Swim Horizontal"));
+        //    Debug.Log("Player " + i + " Ops Light Vertical is: " + players[i].GetAxis("Ops Light Vertical"));
+        //    Debug.Log("Player " + i + " Ops Light Horizontal is: " + players[i].GetAxis("Ops Light Horizontal"));
+        //    Debug.Log("Player " + i + " Ops Action is: " + players[i].GetButtonDown("Ops Action"));
+        //    Debug.Log("Player " + i + " Ops Sub Vertical is: " + players[i].GetAxis("Ops Sub Move Vertical"));
+        //    Debug.Log("Player " + i + " Ops Sub Horizontal is: " + players[i].GetAxis("Ops Sub Move Horizontal"));
+        //    Debug.Log("Player " + i + " Ops Sub Light Vertical is: " + players[i].GetAxis("Ops Sub Light Vertical"));
+        //    Debug.Log("Player " + i + " Ops Sub Light Horizontal is: " + players[i].GetAxis("Ops Sub Light Horizontal"));
+        //    Debug.Log("Player " + i + " Ops Sub Egress is: " + players[i].GetButtonDown("Ops Sub Egress"));
+        //    Debug.Log("Player " + i + " Ops Dialogue Select is: " + players[i].GetButtonDown("Ops Dialogue Select"));
 
-        }
+        //}
     }
 }

@@ -137,6 +137,7 @@ public class Task_MenuTasks: Task
     public float sizeIdle = 20;
     public float sizeHighlight = 22;
 
+    public Color colorHighlight = new Color(1, 0, 0, 1);
     public Color colorVis = new Color(1, 1, 1, 1);
     public Color colorInvis = new Color(1, 1, 1, 0);
     public float colorNormalizedTime = .15f;
@@ -164,12 +165,13 @@ public class Task_MenuAnimation_Highlight : Task_MenuTasks
     {
         myTMP.fontSize = sizeIdle;
     }
-
+    
     public override void TaskUpdate()
     {
         base.TaskUpdate();
         //Debug.Log("Task_MenuAnimation_Highlight is running");
         myTMP.fontSize += Time.unscaledDeltaTime * scaleSpeed;
+        myTMP.color = Color.Lerp(myTMP.color, colorHighlight, .1f);
         if (myTMP.fontSize >= sizeHighlight)
             SetStatus(TaskStatus.Success);
     }
@@ -178,6 +180,7 @@ public class Task_MenuAnimation_Highlight : Task_MenuTasks
     {
         base.OnFail();
         myTMP.fontSize = sizeIdle;
+        myTMP.color = colorVis;
     }
 
     public override void OnAbort()
@@ -189,6 +192,7 @@ public class Task_MenuAnimation_Highlight : Task_MenuTasks
     {
         base.OnSuccess();
         myTMP.fontSize = sizeHighlight;
+        myTMP.color = colorHighlight;
     }
 }
 
@@ -218,8 +222,9 @@ public class Task_MenuAnimation_Unhighlight : Task_MenuTasks
     public override void TaskUpdate()
     {
         base.TaskUpdate();
-        Debug.Log("Task_MenuAnimation_Unhighlight is running");
+        //Debug.Log("Task_MenuAnimation_Unhighlight is running");
         myTMP.fontSize -= Time.unscaledDeltaTime * scaleSpeed;
+        myTMP.color = Color.Lerp(myTMP.color, colorVis, .1f);
         if (myTMP.fontSize <= sizeIdle)
             SetStatus(TaskStatus.Success);
     }
@@ -228,6 +233,7 @@ public class Task_MenuAnimation_Unhighlight : Task_MenuTasks
     {
         base.OnFail();
         myTMP.fontSize = sizeHighlight;
+        myTMP.color = colorHighlight;
     }
 
     public override void OnAbort()
@@ -239,6 +245,7 @@ public class Task_MenuAnimation_Unhighlight : Task_MenuTasks
     {
         base.OnSuccess();
         myTMP.fontSize = sizeIdle;
+        myTMP.color = colorVis;
     }
 }
 
@@ -264,16 +271,15 @@ public class Task_MenuAnimation_Visible : Task_MenuTasks
 
     public override void Init()
     {
-        myTMP.color = colorInvis;
         timer = 0;
     }
 
     public override void TaskUpdate()
     {
         base.TaskUpdate();
-        Debug.Log("Task_MenuAnimation_Visible is running");
+        //Debug.Log("Task_MenuAnimation_Visible is running");
         timer += Time.unscaledDeltaTime;
-        myTMP.color = Color.Lerp(colorInvis, colorVis, timer / colorNormalizedTime);
+        myTMP.color = Color.Lerp(myTMP.color, new Color (myTMP.color.r, myTMP.color.g, myTMP.color.b, 1), timer / colorNormalizedTime);
         if (timer / colorNormalizedTime >= 1)
             SetStatus(TaskStatus.Success);
     }
@@ -281,7 +287,7 @@ public class Task_MenuAnimation_Visible : Task_MenuTasks
     public override void OnFail()
     {
         base.OnFail();
-        myTMP.color = colorInvis;
+        myTMP.color = new Color(myTMP.color.r, myTMP.color.g, myTMP.color.b, 0);
     }
 
     public override void OnAbort()
@@ -292,7 +298,7 @@ public class Task_MenuAnimation_Visible : Task_MenuTasks
     public override void OnSuccess()
     {
         base.OnSuccess();
-        myTMP.color = colorVis;
+        myTMP.color = new Color(myTMP.color.r, myTMP.color.g, myTMP.color.b, 1);
     }
 }
 
@@ -318,16 +324,15 @@ public class Task_MenuAnimation_Invisible : Task_MenuTasks
 
     public override void Init()
     {
-        myTMP.color = colorVis;
         timer = 0;
     }
 
     public override void TaskUpdate()
     {
         base.TaskUpdate();
-        Debug.Log("Task_MenuAnimation_Visible is running");
+        //Debug.Log("Task_MenuAnimation_Visible is running");
         timer += Time.unscaledDeltaTime;
-        myTMP.color = Color.Lerp(colorVis, colorInvis, timer / colorNormalizedTime);
+        myTMP.color = Color.Lerp(myTMP.color, new Color(myTMP.color.r, myTMP.color.g, myTMP.color.b, 0), timer / colorNormalizedTime);
         if (timer / colorNormalizedTime >= 1)
             SetStatus(TaskStatus.Success);
     }
@@ -335,7 +340,7 @@ public class Task_MenuAnimation_Invisible : Task_MenuTasks
     public override void OnFail()
     {
         base.OnFail();
-        myTMP.color = colorVis;
+        myTMP.color = new Color(myTMP.color.r, myTMP.color.g, myTMP.color.b, 1);
     }
 
     public override void OnAbort()
@@ -346,6 +351,6 @@ public class Task_MenuAnimation_Invisible : Task_MenuTasks
     public override void OnSuccess()
     {
         base.OnSuccess();
-        myTMP.color = colorInvis;
+        myTMP.color = new Color(myTMP.color.r, myTMP.color.g, myTMP.color.b, 0);
     }
 }

@@ -15,13 +15,13 @@ public class Deeper_RolloverInt {
                 if (value < 0)
                 {
                     _intVal = _prevalueOffset + _prevalueRange - 1;
-                    Debug.Log(_intVal);
+                    //Debug.Log(_intVal);
                 }
                 else
                 {
                     _prevalue = (value - _prevalueOffset) % _prevalueRange;
                     _intVal = _prevalue + _prevalueOffset;
-                    Debug.Log(_intVal);
+                    //Debug.Log(_intVal);
                 }
             }
         }
